@@ -22,7 +22,7 @@ public class PagoController {
 
     private final PagoRepository repo;
     private final RestClient http = RestClient.builder()
-            .requestFactory(new JdkClientHttpRequestFactory())  // soporta PATCH
+            .requestFactory(new JdkClientHttpRequestFactory(java.net.http.HttpClient.newBuilder().version(java.net.http.HttpClient.Version.HTTP_1_1).build()))  // soporta PATCH
             .build();
 
     @Value("${servicios.inventario}") String inventarioUrl;
