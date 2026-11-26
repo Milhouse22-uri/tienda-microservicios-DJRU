@@ -60,11 +60,11 @@ services:
       - red-tienda
 
 
-  # api-envios:
-  #   build: ./api-envios
-  #   ports: ["8003:8003"]
-  #   environment: { PORT: "8003" }
-  #   networks: [red-tienda]
+  api-envios:
+      build: ./api-envios
+      ports: ["8003:8003"]
+      environment: { PORT: "8003" }
+      networks: [red-tienda]
 
   api-inventario:
       build: ./api-inventario
