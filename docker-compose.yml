@@ -60,17 +60,17 @@ services:
       - red-tienda
 
 
-  # api-envios:
-  #   build: ./api-envios
-  #   ports: ["8003:8003"]
-  #   environment: { PORT: "8003" }
-  #   networks: [red-tienda]
+  api-envios:
+      build: ./api-envios
+      ports: ["8003:8003"]
+      environment: { PORT: "8003" }
+      networks: [red-tienda]
 
-  # api-inventario:
-  #   build: ./api-inventario
-  #   ports: ["8004:8004"]
-  #   environment: { PORT: "8004" }
-  #   networks: [red-tienda]
+  api-inventario:
+      build: ./api-inventario
+      ports: ["8004:8004"]
+      environment: { PORT: "8004" }
+      networks: [red-tienda]
 
   api-carrito:
       build: ./api-carrito
@@ -106,12 +106,12 @@ services:
     depends_on: { postgres: { condition: service_healthy } }
     networks: [red-tienda]
 
-  # api-resenas:
-  #   build: ./api-resenas
-  #   ports: ["8008:8008"]
-  #   environment: { PORT: "8008", MONGO_URL: "mongodb://mongo:27017", MONGO_DB: resenas_db }
-  #   depends_on: [mongo]
-  #   networks: [red-tienda]
+  api-resenas:
+     build: ./api-resenas
+     ports: ["8008:8008"]
+     environment: { PORT: "8008", MONGO_URL: "mongodb://mongo:27017", MONGO_DB: resenas_db }
+     depends_on: [mongo]
+     networks: [red-tienda]
 
   # frontend-tienda:
   #   build: ./frontend-tienda
