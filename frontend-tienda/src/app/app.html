@@ -1,0 +1,20 @@
+<header class="nav">
+  <a routerLink="/" class="logo">🛍️ Tienda</a>
+  <nav class="links">
+    <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Catálogo</a>
+    <a routerLink="/carrito" routerLinkActive="activo">Carrito</a>
+    <a routerLink="/pedidos" routerLinkActive="activo">Mis pedidos</a>
+  </nav>
+  <div class="usuario">
+    @if (sesion.usuario(); as u) {
+      <span>Hola, {{ u.nombre }}</span>
+      <button class="btn secundario" type="button" (click)="salir()">Salir</button>
+    } @else {
+      <a class="btn" routerLink="/login">Iniciar sesión</a>
+    }
+  </div>
+</header>
+
+<main class="contenedor">
+  <router-outlet />
+</main>
