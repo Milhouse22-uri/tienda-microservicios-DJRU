@@ -37,7 +37,7 @@ services:
       <<: *pg
       PORT: "8001"
       DB_NAME: usuarios_db
-      JWT_SECRET: ${JWT_SECRET}
+      JWT_SECRET: ${JWT_SECRET:-tienda-microservicios-djru-secreta-2026-jwt}
     depends_on:
       postgres:
         condition: service_healthy
@@ -60,23 +60,23 @@ services:
       - red-tienda
 
 
-  # api-envios:
-  #   build: ./api-envios
-  #   ports: ["8003:8003"]
-  #   environment: { PORT: "8003" }
-  #   networks: [red-tienda]
+  api-envios:
+      build: ./api-envios
+      ports: ["8003:8003"]
+      environment: { PORT: "8003" }
+      networks: [red-tienda]
 
-  # api-inventario:
-  #   build: ./api-inventario
-  #   ports: ["8004:8004"]
-  #   environment: { PORT: "8004" }
-  #   networks: [red-tienda]
+  api-inventario:
+      build: ./api-inventario
+      ports: ["8004:8004"]
+      environment: { PORT: "8004" }
+      networks: [red-tienda]
 
-  # api-carrito:
-  #   build: ./api-carrito
-  #   ports: ["8005:8005"]
-  #   environment: { PORT: "8005" }
-  #   networks: [red-tienda]
+  api-carrito:
+      build: ./api-carrito
+      ports: ["8005:8005"]
+      environment: { PORT: "8005" }
+      networks: [red-tienda]
 
 
   api-pedidos:
@@ -106,12 +106,12 @@ services:
     depends_on: { postgres: { condition: service_healthy } }
     networks: [red-tienda]
 
-  # api-resenas:
-  #   build: ./api-resenas
-  #   ports: ["8008:8008"]
-  #   environment: { PORT: "8008", MONGO_URL: "mongodb://mongo:27017", MONGO_DB: resenas_db }
-  #   depends_on: [mongo]
-  #   networks: [red-tienda]
+  api-resenas:
+     build: ./api-resenas
+     ports: ["8008:8008"]
+     environment: { PORT: "8008", MONGO_URL: "mongodb://mongo:27017", MONGO_DB: resenas_db }
+     depends_on: [mongo]
+     networks: [red-tienda]
 
   # frontend-tienda:
   #   build: ./frontend-tienda

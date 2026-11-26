@@ -1,3 +1,4 @@
+\c productos_db
 CREATE TABLE IF NOT EXISTS productos (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
