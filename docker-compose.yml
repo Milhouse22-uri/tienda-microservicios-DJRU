@@ -27,19 +27,38 @@ services:
     ports: ["27017:27017"]
     networks: [red-tienda]
 
-  # api-usuarios:
-  #   build: ./api-usuarios
-  #   ports: ["8001:8001"]
-  #   environment: { <<: *pg, PORT: "8001", DB_NAME: usuarios_db, JWT_SECRET: tienda-secreta-2026 }
-  #   depends_on: { postgres: { condition: service_healthy } }
-  #   networks: [red-tienda]
 
-  # api-productos:
-  #   build: ./api-productos
-  #   ports: ["8002:8002"]
-  #   environment: { <<: *pg, PORT: "8002", DB_NAME: productos_db }
-  #   depends_on: { postgres: { condition: service_healthy } }
-  #   networks: [red-tienda]
+
+  api-usuarios:
+    build: ./api-usuarios
+    ports:
+      - "8001:8001"
+    environment:
+      <<: *pg
+      PORT: "8001"
+      DB_NAME: usuarios_db
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - red-tienda
+
+
+  api-productos:
+    build: ./api-productos
+    ports:
+      - "8002:8002"
+    environment:
+      <<: *pg
+      PORT: "8002"
+      DB_NAME: productos_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - red-tienda
+
 
   # api-envios:
   #   build: ./api-envios
@@ -59,12 +78,19 @@ services:
   #   environment: { PORT: "8005" }
   #   networks: [red-tienda]
 
-  # api-pedidos:
-  #   build: ./api-pedidos
-  #   ports: ["8006:8006"]
-  #   environment: { <<: *pg, PORT: "8006", DB_NAME: pedidos_db }
-  #   depends_on: { postgres: { condition: service_healthy } }
-  #   networks: [red-tienda]
+
+  api-pedidos:
+    build: ./api-pedidos
+    ports: ["8006:8006"]
+    environment:
+      <<: *pg
+      PORT: "8006"
+      DB_NAME: pedidos_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [red-tienda]
+
 
   api-pagos:
     build: ./api-pagos
