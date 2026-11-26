@@ -1,0 +1,14 @@
+{
+  "name": "api-carrito",
+  "version": "1.0.0",
+  "description": "Microservicio de carrito de compras (en memoria)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
