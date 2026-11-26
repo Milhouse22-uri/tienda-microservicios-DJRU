@@ -27,12 +27,22 @@ services:
     ports: ["27017:27017"]
     networks: [red-tienda]
 
-  # api-usuarios:
-  #   build: ./api-usuarios
-  #   ports: ["8001:8001"]
-  #   environment: { <<: *pg, PORT: "8001", DB_NAME: usuarios_db, JWT_SECRET: tienda-secreta-2026 }
-  #   depends_on: { postgres: { condition: service_healthy } }
-  #   networks: [red-tienda]
+
+
+  api-usuarios:
+    build: ./api-usuarios
+    ports:
+      - "8001:8001"
+    environment:
+      <<: *pg
+      PORT: "8001"
+      DB_NAME: usuarios_db
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - red-tienda
 
 
   api-productos:
