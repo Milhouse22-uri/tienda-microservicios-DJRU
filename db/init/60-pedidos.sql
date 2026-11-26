@@ -1,3 +1,4 @@
+\c pedidos_db
 CREATE TABLE IF NOT EXISTS pedidos (
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER NOT NULL,
