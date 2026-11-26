@@ -59,12 +59,19 @@ services:
   #   environment: { PORT: "8005" }
   #   networks: [red-tienda]
 
-  # api-pedidos:
-  #   build: ./api-pedidos
-  #   ports: ["8006:8006"]
-  #   environment: { <<: *pg, PORT: "8006", DB_NAME: pedidos_db }
-  #   depends_on: { postgres: { condition: service_healthy } }
-  #   networks: [red-tienda]
+
+  api-pedidos:
+    build: ./api-pedidos
+    ports: ["8006:8006"]
+    environment:
+      <<: *pg
+      PORT: "8006"
+      DB_NAME: pedidos_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [red-tienda]
+
 
   api-pagos:
     build: ./api-pagos
