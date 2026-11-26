@@ -66,19 +66,19 @@ services:
   #   depends_on: { postgres: { condition: service_healthy } }
   #   networks: [red-tienda]
 
-  # api-pagos:
-  #   build: ./api-pagos
-  #   ports: ["8007:8007"]
-  #   environment:
-  #     <<: *pg
-  #     PORT: "8007"
-  #     DB_NAME: pagos_db
-  #     INVENTARIO_URL: http://api-inventario:8004
-  #     CARRITO_URL: http://api-carrito:8005
-  #     PEDIDOS_URL: http://api-pedidos:8006
-  #     ENVIOS_URL: http://api-envios:8003
-  #   depends_on: { postgres: { condition: service_healthy } }
-  #   networks: [red-tienda]
+  api-pagos:
+    build: ./api-pagos
+    ports: ["8007:8007"]
+    environment:
+      <<: *pg
+      PORT: "8007"
+      DB_NAME: pagos_db
+      INVENTARIO_URL: http://api-inventario:8004
+      CARRITO_URL: http://api-carrito:8005
+      PEDIDOS_URL: http://api-pedidos:8006
+      ENVIOS_URL: http://api-envios:8003
+    depends_on: { postgres: { condition: service_healthy } }
+    networks: [red-tienda]
 
   # api-resenas:
   #   build: ./api-resenas
