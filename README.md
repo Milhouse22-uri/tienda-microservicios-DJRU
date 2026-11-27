@@ -7,7 +7,7 @@ Plataforma de comercio electrónico construida con una **arquitectura de microse
 | Integrante | Responsabilidad |
 |---|---|
 | Diego Ramírez Vázquez | api-usuarios, api-productos, api-pedidos (PHP + PostgreSQL) |
-| Jacqueline | frontend-tienda (Angular), api-carrito (Node.js) |
+| Jacqueline Jinez Matehuala | frontend-tienda (Angular), api-carrito (Node.js) |
 | Rafael Barranco Mendoza | api-envios, api-resenas (Python), api-inventario (Go) |
 | Uriel Alejandro Martínez Martínez | api-pagos (Java + PostgreSQL), docker-compose, integración y pruebas |
 
