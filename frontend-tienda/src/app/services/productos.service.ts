@@ -5,6 +5,10 @@ import { environment } from '../../environments/environment';
 import { ApiRes, Producto } from '../models';
 import { PRODUCTOS_MOCK } from './mock-data';
 
+function normalizar(p: Producto): Producto {
+  return { ...p, precio: Number(p.precio) };
+}
+
 @Injectable({ providedIn: 'root' })
 export class ProductosService {
   private http = inject(HttpClient);
@@ -23,7 +27,7 @@ export class ProductosService {
     let params = new HttpParams();
     if (q.trim()) params = params.set('q', q.trim());
     if (categoria) params = params.set('categoria', categoria);
-    return this.http.get<ApiRes<Producto[]>>(this.url, { params }).pipe(map((r) => r.data));
+    return this.http.get<ApiRes<Producto[]>>(this.url, { params }).pipe(map((r) => r.data.map(normalizar)));
   }
 
   obtener(id: number): Observable<Producto> {
@@ -31,6 +35,6 @@ export class ProductosService {
       const p = PRODUCTOS_MOCK.find((x) => x.id === id);
       return p ? of(p).pipe(delay(100)) : throwError(() => new Error('Producto no encontrado'));
     }
-    return this.http.get<ApiRes<Producto>>(`${this.url}/${id}`).pipe(map((r) => r.data));
+    return this.http.get<ApiRes<Producto>>(`${this.url}/${id}`).pipe(map((r) => normalizar(r.data)));
   }
 }

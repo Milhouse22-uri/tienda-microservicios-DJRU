@@ -65,7 +65,6 @@ try {
             error('La contraseña debe tener al menos 8 caracteres', 400);
         }
 
-        // Comprobar si el correo ya existe
         $consulta = $pdo->prepare(
             'SELECT id FROM usuarios WHERE correo = :correo'
         );

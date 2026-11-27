@@ -113,10 +113,10 @@ services:
      depends_on: [mongo]
      networks: [red-tienda]
 
-  # frontend-tienda:
-  #   build: ./frontend-tienda
-  #   ports: ["4200:80"]
-  #   networks: [red-tienda]
+  frontend-tienda:
+     build: ./frontend-tienda
+     ports: ["4200:80"]
+     networks: [red-tienda]
 
 networks:
   red-tienda:

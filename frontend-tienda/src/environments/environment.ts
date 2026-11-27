@@ -10,13 +10,13 @@ export const environment = {
   pedidos: 'http://localhost:8006/api/pedidos',
   pagos: 'http://localhost:8007/api/pagos',
   resenas: 'http://localhost:8008/api/resenas',
-  mock: {
-    usuarios: true,
-    productos: true,
-    inventario: true,
-    resenas: true,
-    envios: true,
-    pedidos: true,
-    pagos: true,
-  },
-};
+mock: {
+  usuarios: false,
+  productos: false,
+  inventario: false,
+  resenas: false,
+  envios: false,
+  pedidos: false,
+  pagos: false,
+},
+}
