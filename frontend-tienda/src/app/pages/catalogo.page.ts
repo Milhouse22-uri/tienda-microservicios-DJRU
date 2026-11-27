@@ -1,7 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Producto, PromedioProducto } from '../models';
 import { ProductosService } from '../services/productos.service';
 import { ResenasService } from '../services/resenas.service';
@@ -9,9 +9,11 @@ import { SIN_IMAGEN, estrellas, msgError } from '../utils';
 
 @Component({
   selector: 'app-catalogo-page',
-  imports: [FormsModule, RouterLink, CurrencyPipe],
+  imports: [FormsModule, RouterLink, RouterLinkActive, RouterOutlet, CurrencyPipe],
   template: `
     <h1>Catálogo</h1>
+    <div class="split">
+    <div class="lista">
 
     <div class="filtros">
       <input
@@ -37,7 +39,7 @@ import { SIN_IMAGEN, estrellas, msgError } from '../utils';
     } @else {
       <div class="grid">
         @for (p of productos(); track p.id) {
-          <a class="card" [routerLink]="['/producto', p.id]">
+          <a class="card" [routerLink]="['/producto', p.id]" routerLinkActive="seleccionada">
             <img [src]="p.imagen_url" [alt]="p.nombre" (error)="sinImagen($event)" />
             <div class="card-body">
               <h3>{{ p.nombre }}</h3>
@@ -52,6 +54,9 @@ import { SIN_IMAGEN, estrellas, msgError } from '../utils';
         }
       </div>
     }
+    </div>
+    <router-outlet />
+    </div>
   `,
 })
 export class CatalogoPage {

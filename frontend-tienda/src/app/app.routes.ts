@@ -8,9 +8,12 @@ import { PedidosPage } from './pages/pedidos.page';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPage },
-  { path: '', component: CatalogoPage, pathMatch: 'full' },
-  { path: 'producto/:id', component: DetallePage },
   { path: 'carrito', component: CarritoPage, canActivate: [authGuard] },
   { path: 'pedidos', component: PedidosPage, canActivate: [authGuard] },
+  {
+    path: '',
+    component: CatalogoPage,
+    children: [{ path: 'producto/:id', component: DetallePage }],
+  },
   { path: '**', redirectTo: '' },
 ];
