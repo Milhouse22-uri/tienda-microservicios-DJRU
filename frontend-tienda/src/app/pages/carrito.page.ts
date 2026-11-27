@@ -226,7 +226,7 @@ export class CarritoPage {
           this.pagosSvc.procesar({
             pedido_id: p.id,
             usuario_id: this.uid(),
-            monto: p.total,
+            monto: Number(p.total),
             metodo_pago: this.metodo(),
             items: carrito.items.map((i) => ({ producto_id: i.producto_id, cantidad: i.cantidad })),
           }),
