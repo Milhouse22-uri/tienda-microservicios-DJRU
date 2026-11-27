@@ -77,7 +77,7 @@ import { msgError } from '../utils';
           <div class="campo">
             <label for="cp">Código postal</label>
             <div class="fila">
-              <input id="cp" [ngModel]="cp()" (ngModelChange)="cp.set($event); cotizacion.set(null); pedidoCreado.set(null)" maxlength="5" placeholder="38000" />
+              <input id="cp" [value]="cp()" (input)="onCp($event)" maxlength="5" inputmode="numeric" placeholder="38000" />
               <button class="btn secundario" type="button" [disabled]="cotizando()" (click)="cotizar()">
                 {{ cotizando() ? 'Cotizando...' : 'Cotizar envío' }}
               </button>
@@ -124,6 +124,14 @@ export class CarritoPage {
   private pedidosSvc = inject(PedidosService);
   private pagosSvc = inject(PagosService);
   private sesion = inject(SesionService);
+
+    onCp(ev: Event): void {
+    const el = ev.target as HTMLInputElement;
+    el.value = el.value.replace(/\D/g, '').slice(0, 5); // solo digitos, maximo 5
+    this.cp.set(el.value);
+    this.cotizacion.set(null);
+    this.pedidoCreado.set(null);
+  }
 
   carrito = signal<Carrito | null>(null);
   cp = signal('');

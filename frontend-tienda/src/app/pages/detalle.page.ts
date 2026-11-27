@@ -8,13 +8,14 @@ import { InventarioService } from '../services/inventario.service';
 import { ProductosService } from '../services/productos.service';
 import { ResenasService } from '../services/resenas.service';
 import { SesionService } from '../services/sesion.service';
+import { switchMap, throwError } from 'rxjs';
 import { SIN_IMAGEN, estrellas, msgError } from '../utils';
 
 @Component({
   selector: 'app-detalle-page',
   imports: [FormsModule, RouterLink, CurrencyPipe, DecimalPipe],
   template: `
-    <p><a routerLink="/" class="cat">← Volver al catálogo</a></p>
+    <p><a routerLink="/" class="cat">✕ Cerrar</a></p>
 
     @if (error()) { <p class="error">{{ error() }}</p> }
 
@@ -90,7 +91,7 @@ import { SIN_IMAGEN, estrellas, msgError } from '../utils';
           </div>
           <div class="campo">
             <label for="comentario">Comentario</label>
-            <textarea id="comentario" [ngModel]="comentario()" (ngModelChange)="comentario.set($event)"></textarea>
+            <textarea id="comentario" maxlength="300" [ngModel]="comentario()" (ngModelChange)="comentario.set($event)"></textarea>
           </div>
           @if (errorResena()) { <p class="error">{{ errorResena() }}</p> }
           <button class="btn" type="button" [disabled]="enviando()" (click)="enviarResena(p)">
@@ -108,9 +109,10 @@ export class DetallePage {
   private inventarioSvc = inject(InventarioService);
   private resenasSvc = inject(ResenasService);
   private carritoSvc = inject(CarritoService);
+  private route = inject(ActivatedRoute);
   sesion = inject(SesionService);
   router = inject(Router);
-  private id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  private id = 0;
 
   producto = signal<Producto | null>(null);
   disponibles = signal<number | null>(null);
@@ -140,25 +142,50 @@ export class DetallePage {
   });
 
   constructor() {
-    this.productosSvc.obtener(this.id).subscribe({
-      next: (p) => this.producto.set(p),
-      error: (e) => this.error.set(msgError(e)),
+    // El componente se reutiliza al cambiar de producto: reacciona al cambio del id
+    this.route.paramMap.subscribe((pm) => {
+      this.id = Number(pm.get('id'));
+      this.reiniciar();
+      this.cargar();
     });
-    this.inventarioSvc.disponibles(this.id).subscribe({
-      next: (n) => this.disponibles.set(n),
-      error: () => this.disponibles.set(0),
+  }
+
+  private reiniciar(): void {
+    this.producto.set(null);
+    this.disponibles.set(null);
+    this.resenas.set([]);
+    this.promedio.set(0);
+    this.total.set(0);
+    this.cantidad.set(1);
+    this.aviso.set('');
+    this.error.set('');
+    this.comentario.set('');
+    this.errorResena.set('');
+  }
+
+  private cargar(): void {
+    const id = this.id;
+    this.productosSvc.obtener(id).subscribe({
+      next: (p) => id === this.id && this.producto.set(p),
+      error: (e) => id === this.id && this.error.set(msgError(e)),
+    });
+    this.inventarioSvc.disponibles(id).subscribe({
+      next: (n) => id === this.id && this.disponibles.set(n),
+      error: () => id === this.id && this.disponibles.set(0),
     });
     this.cargarResenas();
   }
 
   private cargarResenas(): void {
-    this.resenasSvc.porProducto(this.id).subscribe({
+    const id = this.id;
+    this.resenasSvc.porProducto(id).subscribe({
       next: (r) => {
+        if (id !== this.id) return;
         this.resenas.set(r.resenas);
         this.promedio.set(r.promedio);
         this.total.set(r.total);
       },
-      error: () => this.resenas.set([]),
+      error: () => id === this.id && this.resenas.set([]),
     });
   }
 
@@ -172,7 +199,22 @@ export class DetallePage {
     this.aviso.set('');
     this.error.set('');
     this.carritoSvc
-      .agregar(u.id, { producto_id: p.id, nombre: p.nombre, precio: p.precio, cantidad: this.cantidad() })
+      .obtener(u.id)
+      .pipe(
+        switchMap((c) => {
+          const ya = c.items.find((i) => i.producto_id === p.id)?.cantidad ?? 0;
+          const disp = this.disponibles() ?? 0;
+          if (ya + this.cantidad() > disp) {
+            return throwError(() => new Error(`Ya tienes ${ya} en el carrito y solo hay ${disp} disponibles`));
+          }
+          return this.carritoSvc.agregar(u.id, {
+            producto_id: p.id,
+            nombre: p.nombre,
+            precio: p.precio,
+            cantidad: this.cantidad(),
+          });
+        }),
+      )
       .subscribe({
         next: () => {
           this.aviso.set('Producto agregado al carrito');
